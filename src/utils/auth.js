@@ -8,6 +8,7 @@ export function generateToken(user) {
     const payload = {
         id: user.id,
         username: user.username,
+        role: user.role // Adiciona o papel ao token
     };
 
     return jwt.sign(payload, process.env.JWT_SECRET, {

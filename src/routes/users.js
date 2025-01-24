@@ -2,24 +2,24 @@ import { Router } from 'express';
 import db from '../database.js';
 import bcrypt from 'bcrypt';
 import { generateToken, verifyToken } from '../utils/auth.js';
+import { restrictToAdmin } from '../middlewares/rbac.js'; // Middleware para proteger rotas de admin
 
 const router = Router();
 
 //SIGN UP
 router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, role = 'user' } = req.body;
 
     if (!username || !password) {
         return res.status(400).json({ error: 'Username e password obrigatórios.' });
     }
 
     try {
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
+        const query = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)';
 
-        db.run(query, [username, hashedPassword], function (err) {
+        db.run(query, [username, hashedPassword, role], function (err) {
             if (err) {
                 if (err.message.includes('UNIQUE constraint failed')) {
                     return res.status(400).json({ error: 'Username já está em uso.' });
@@ -28,7 +28,7 @@ router.post('/signup', async (req, res) => {
             }
 
 
-            res.status(201).json({id: this.lastID, username });
+            res.status(201).json({id: this.lastID, username, role });
         });
 
     } catch (error) {
@@ -62,8 +62,12 @@ router.post('/signin', (req, res) => {
                 return res.status(401).json({ error: "Senha incorreta." })
             }
 
-            // Gera o token JWT
-            const token = generateToken({ id: user.id, username: user.username });
+            // Gera o token JWT role
+            const token = generateToken({
+                id: user.id,
+                username: user.username,
+                role: user.role
+            });
             
             // Retorna o token e informações básicas do usuário
             res.status(200).json({
@@ -72,6 +76,7 @@ router.post('/signin', (req, res) => {
                 user: {
                     id: user.id,
                     username: user.username,
+                    role: user.role
                 },
             });
         } catch (error) {
@@ -81,9 +86,9 @@ router.post('/signin', (req, res) => {
     });
 });
 
-// GET
-router.get('/', (req, res) => {
-    const query = 'SELECT * FROM users';
+// GET - Listar Todos os Usuários (Apenas Admin)
+router.get('/', verifyToken, restrictToAdmin, (req, res) => {
+    const query = 'SELECT id, username, role FROM users';
     db.all(query, [], (err, rows) => {
         if (err) {
             console.error(err.message);

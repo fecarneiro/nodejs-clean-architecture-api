@@ -2,6 +2,7 @@ import { Router } from 'express';
 import db from '../database.js';
 import { verifyToken } from '../utils/auth.js';
 
+
 const router = Router();
 
 // GET: Listar todos os posts com username e user_id
