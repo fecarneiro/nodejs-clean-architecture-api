@@ -1,51 +1,40 @@
 import { Router } from 'express';
 import db from '../database.js';
 import { verifyToken } from '../utils/auth.js';
+import CommentRepository from '../repositories/comment.repository.js';
 
 const router = Router();
+const commentRepository = new CommentRepository(db);
 
-// GET: Listar todos os comentários
-router.get('/', (req, res) => {
-    const query = `
-        SELECT comments.id, comments.content, comments.post_id, comments.user_id, users.username 
-        FROM comments 
-        JOIN users ON comments.user_id = users.id
-    `;
-    db.all(query, [], (err, rows) => {
-        if (err) {
-            console.error(err.message);
-            return res.status(500).json({ error: 'Erro ao buscar comentários.' });
-        }
-        res.status(200).json(rows);
-    });
-});
-
-// POST: Criar novo comentário (Protegido)
-router.post('/', verifyToken, (req, res) => {
+//Criar novo comentário - protegido por JWT
+router.post('/', verifyToken, async(req, res) => {
     const { post_id, content } = req.body;
+    const user_id = req.user.id;
 
     if (!post_id || !content) {
-        return res.status(400).json({ error: 'Post ID e conteúdo são obrigatórios.' });
+        return res.status(400).json({ error: 'Post ID e conteúdo do comentário são obrigatórios.' });
     }
 
-    const userId = req.user.id;  // Obtendo o ID do usuário autenticado via token
+      try {
+        const comment = await commentRepository.createComment(post_id, user_id, content);
+        res.status(201).json(comment);
 
-    const query = 'INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)';
-    db.run(query, [post_id, userId, content], function (err) {
-        if (err) {
-            return res.status(500).json({
-                error: 'Erro ao registrar comentário no DB.',
-                details: err.message 
-                });
-        }
+      } catch (error) {
+        console.error('Erro ao criar comentário:', error);
+        res.status(500).json({ error: 'Erro ao criar comentário.' });
+      }
+});
 
-        res.status(201).json({
-            id: this.lastID,
-            post_id,
-            user_id: userId,
-            username: req.user.username, // Extraindo username do token JWT
-            content });
-    });
+
+// Listar todos os comentários - protegido por JWT
+router.get('/', verifyToken, async(req, res) => {
+    try {
+        const comments = await commentRepository.findAll();
+        res.status(201).json(comments);
+    } catch (error) {
+        console.error('Erro ao listar comentários.', error);
+        res.status(500).json({ error: 'Erro ao listar comentários.' });
+    }  
 });
 
 export default router;

@@ -25,7 +25,7 @@ class PostRepository extends BaseRepository {
             const query = `
             SELECT posts.id, posts.content, posts.user_id, users.username
             FROM ${this.tableName}
-            JOIN users ON posts.user_id = users.id;}
+            JOIN users ON posts.user_id = users.id
             `
             this.db.all(query, [], (err, rows) => {
                 if (err) {
