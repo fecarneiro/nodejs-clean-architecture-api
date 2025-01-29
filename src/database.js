@@ -3,13 +3,13 @@ const { Database } = sqlite3;
 
 const db = new Database('./database.db', (err) => {
     if (err) {
-        console.error('Erro ao conectar no banco de dados:', err.message);
+        console.error('Error connecting to the database:', err.message);
     } else {
-        console.log('Conectado ao banco de dados SQLite.');
+        console.log('Connected to the SQLite database.');
     }
 });
 
-// Tabela 'users'
+// 'users' table
 db.run(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +19,7 @@ db.run(`
     )
 `);
 
-// Tabela 'posts'
+// 'posts' table
 db.run(`
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +29,7 @@ db.run(`
     )
 `);
 
-// Tabela 'comments'
+// 'comments' table
 db.run(`
     CREATE TABLE IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

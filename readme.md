@@ -10,22 +10,25 @@ Este projeto é uma API backend construída com Node.js e SQLite, que oferece fu
 A estrutura do projeto está organizada da seguinte forma:
 
 ```
-backend/
-├── crud/
-│   ├── node_modules/
-│   ├── roles/
+CRUD/
+├── node_modules/
 ├── src/
-│   ├── middlewares/
-│   │   ├── rbac.js
-│   ├── routes/
-│   │   ├── users.js
-│   │   ├── posts.js
-│   │   ├── comments.js
-│   ├── utils/
-│   │   ├── auth.js
-│   ├── roles.js
-│   ├── app.js
-│   ├── database.js
+│ ├── middlewares/
+│ │ ├── rbac.js
+│ ├── repositories/
+│ │ ├── base.repository.js
+│ │ ├── comment.repository.js
+│ │ ├── post.repository.js
+│ │ ├── user.repository.js
+│ ├── routes/
+│ │ ├── users.js
+│ │ ├── posts.js
+│ │ ├── comments.js
+│ ├── utils/
+│ │ ├── auth.js
+│ ├── roles.js
+│ ├── app.js
+│ ├── database.js
 ├── tests/
 ├── tests-examples/
 ├── .env
@@ -262,6 +265,30 @@ O banco de dados utiliza SQLite e é inicializado automaticamente no arquivo `da
    - `post_id`: Relacionamento com a tabela `posts`.
    - `user_id`: Relacionamento com a tabela `users`.
    - `content`: Conteúdo do comentário.
+
+
+---
+
+## **Repositórios**
+
+A pasta `repositories` contém a implementação do padrão de repositório, que abstrai a lógica de acesso a dados e facilita a manutenção e testes do código.
+
+### Estrutura da Pasta `repositories`
+
+1. **`base.repository.js`**:
+   - Classe base que define métodos comuns para todos os repositórios.
+
+2. **`comment.repository.js`**:
+   - Repositório específico para a tabela `comments`.
+   - Métodos para criar e listar comentários, incluindo informações relacionadas de `users` e `posts`.
+
+3. **`post.repository.js`**:
+   - Repositório específico para a tabela `posts`.
+   - Métodos para criar e listar posts, incluindo informações do autor.
+
+4. **`user.repository.js`**:
+   - Repositório específico para a tabela `users`.
+   - Métodos para criar, listar e autenticar usuários.
 
 ---
 

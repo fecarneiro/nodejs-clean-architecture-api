@@ -2,28 +2,28 @@ import express from 'express';
 import userRoutes from './routes/users.js';
 import postRoutes from './routes/posts.js';
 import commentsRoutes from './routes/comments.js';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
-//Função do pacote dotenv para fornecer variáveis do .env
+// Function from dotenv package to provide variables from .env
 dotenv.config();
 
 const app = express();
 
-// Middleware → interpretar JSON
+// Middleware → parse JSON
 app.use(express.json());
 
-// Middleware → Rota raiz
+// Middleware → Root route
 app.get('/', (req, res) => {
-    res.status(200).send('API está rodando!');
+    res.status(200).send('API is running!');
 });
 
-// Middleware → Rotas
+// Middleware → Routes
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
 app.use('/comments', commentsRoutes);
 
-// Porta do Servidor
+// Server port
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });

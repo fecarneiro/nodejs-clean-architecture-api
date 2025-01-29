@@ -5,21 +5,21 @@ class PostRepository extends BaseRepository {
         super('posts', db);
     }
 
-    // Método para criar um novo post
+    // Method to create a new post
     createPost(user_id, content) {
         return new Promise((resolve, reject) => {
             const query = `INSERT INTO ${this.tableName} (user_id, content) VALUES (?, ?)`;
             this.db.run(query, [user_id, content], function (err) {
                 if (err) {
-                    console.error('Erro ao criar post:', err);
-                    return reject(new Error('Erro ao criar post.'));
+                    console.error('Error creating post:', err);
+                    return reject(new Error('Error creating post.'));
                 }
                 resolve({ id: this.lastID, user_id, content });
             });
         });
     }
 
-    // Método para listar todos os posts
+    // Method to list all posts
     findAll() {
         return new Promise((resolve, reject) => {
             const query = `
@@ -29,7 +29,7 @@ class PostRepository extends BaseRepository {
             `
             this.db.all(query, [], (err, rows) => {
                 if (err) {
-                    console.error('Erro ao listar posts:', err);
+                    console.error('Error listing posts:', err);
                     return reject(err);
                 }
                 resolve(rows);

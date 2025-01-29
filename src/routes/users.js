@@ -7,12 +7,12 @@ import UserRepository from '../repositories/user.repository.js';
 const router = Router();
 const userRepository = new UserRepository(db);
 
-//SIGN UP (cria acc com senha criptografada)
+// SIGN UP (creates account with encrypted password)
 router.post('/signup', async (req, res) => {
     const { username, password, role = 'user' } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ error: 'Username e password obrigatórios.' });
+        return res.status(400).json({ error: 'Username and password are required.' });
     }
 
     try {
@@ -20,32 +20,32 @@ router.post('/signup', async (req, res) => {
         res.status(201).json(user);
     } catch (error) {
         if (error.message.includes('UNIQUE constraint failed')) {
-            return res.status(400).json({ error: 'Username já está em uso.' });
+            return res.status(400).json({ error: 'Username is already taken.' });
         }
-        console.error('Erro ao criar usuário:', error);
-        res.status(500).json({ error: 'Erro ao criar usuário.' });
-    }  
+        console.error('Error creating user:', error);
+        res.status(500).json({ error: 'Error creating user.' });
+    }
 });
 
-//SIGN IN (gera token JWT)
+// SIGN IN (generates JWT token)
 router.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ error: 'Username e password obrigatórios.' });
+        return res.status(400).json({ error: 'Username and password are required.' });
     }
 
     try {
         const user = await userRepository.findByCredentials(username, password);
         if (!user) {
-            return res.status(401).json({ error: 'Credenciais inválidas' });
+            return res.status(401).json({ error: 'Invalid credentials' });
         }
 
         const token = generateToken(user);
         res.status(200).json({ user, token });
     } catch (error) {
-        console.error('Erro ao autenticar usuário:', error);
-        res.status(500).json({ error: 'Erro ao autenticar usuário.' });
+        console.error('Error authenticating user:', error);
+        res.status(500).json({ error: 'Error authenticating user.' });
     }
 });
 
@@ -55,9 +55,9 @@ router.get('/', verifyToken, restrictToAdmin, async (req, res) => {
         const users = await userRepository.findAll();
         res.status(200).json(users);
     } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
-        res.status(500).json({ error: 'Erro ao autenticar usuários.' });
-    }    
+        console.error('Error fetching users:', error);
+        res.status(500).json({ error: 'Error fetching users.' });
+    }
 });
 
 export default router;
