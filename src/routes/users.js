@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import db from '../database.js';
-import bcrypt from 'bcrypt';
 import { generateToken, verifyToken } from '../utils/auth.js';
-import { restrictToAdmin } from '../middlewares/rbac.js'; // Middleware para proteger rotas de admin
+import { restrictToAdmin } from '../middlewares/rbac.js';
+import UserRepository from '../repositories/user.repository.js';
 
 const router = Router();
+const userRepository = new UserRepository(db);
 
-//SIGN UP
+//SIGN UP (cria acc com senha criptografada)
 router.post('/signup', async (req, res) => {
     const { username, password, role = 'user' } = req.body;
 
@@ -15,87 +16,48 @@ router.post('/signup', async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const query = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)';
-
-        db.run(query, [username, hashedPassword, role], function (err) {
-            if (err) {
-                if (err.message.includes('UNIQUE constraint failed')) {
-                    return res.status(400).json({ error: 'Username já está em uso.' });
-                }
-                return res.status(500).json({ error: 'Erro ao inserir usuário no DB.' });
-            }
-
-
-            res.status(201).json({id: this.lastID, username, role });
-        });
-
+        const user = await userRepository.createUser(username, password, role);
+        res.status(201).json(user);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao processar solicitação' });
+        if (error.message.includes('UNIQUE constraint failed')) {
+            return res.status(400).json({ error: 'Username já está em uso.' });
+        }
+        console.error('Erro ao criar usuário:', error);
+        res.status(500).json({ error: 'Erro ao criar usuário.' });
     }  
 });
 
-//SIGN IN
-router.post('/signin', (req, res) => {
+//SIGN IN (gera token JWT)
+router.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
         return res.status(400).json({ error: 'Username e password obrigatórios.' });
     }
 
-    const query = 'SELECT * FROM users WHERE username = ?'
-    db.get(query, [username], async (err, user) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Erro ao localizar usuário.'});
-        }
+    try {
+        const user = await userRepository.findByCredentials(username, password);
         if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado.' })
+            return res.status(401).json({ error: 'Credenciais inválidas' });
         }
 
-        try {
-            // Verifica a senha
-            const match = await bcrypt.compare(password, user.password);
-            if (!match) {
-                return res.status(401).json({ error: "Senha incorreta." })
-            }
-
-            // Gera o token JWT role
-            const token = generateToken({
-                id: user.id,
-                username: user.username,
-                role: user.role
-            });
-            
-            // Retorna o token e informações básicas do usuário
-            res.status(200).json({
-                message: 'Login bem-sucedido',
-                token, // Token JWT
-                user: {
-                    id: user.id,
-                    username: user.username,
-                    role: user.role
-                },
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Erro ao processar a solicitação.'});
-        }
-    });
+        const token = generateToken(user);
+        res.status(200).json({ user, token });
+    } catch (error) {
+        console.error('Erro ao autenticar usuário:', error);
+        res.status(500).json({ error: 'Erro ao autenticar usuário.' });
+    }
 });
 
-// GET - Listar Todos os Usuários (Apenas Admin)
-router.get('/', verifyToken, restrictToAdmin, (req, res) => {
-    const query = 'SELECT id, username, role FROM users';
-    db.all(query, [], (err, rows) => {
-        if (err) {
-            console.error(err.message);
-            return res.status(500).json({ error: 'Erro ao buscar usuários.' });
-        }
-        res.status(200).json(rows);
-    });
+// GET ALL (admin)
+router.get('/', verifyToken, restrictToAdmin, async (req, res) => {
+    try {
+        const users = await userRepository.findAll();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        res.status(500).json({ error: 'Erro ao autenticar usuários.' });
+    }    
 });
 
 export default router;

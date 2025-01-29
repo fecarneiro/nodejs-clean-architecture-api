@@ -1,4 +1,5 @@
-import { Database } from 'sqlite3';
+import sqlite3 from 'sqlite3';
+const { Database } = sqlite3;
 
 const db = new Database('./database.db', (err) => {
     if (err) {
@@ -11,7 +12,6 @@ const db = new Database('./database.db', (err) => {
 // Tabela 'users'
 db.run(`
     CREATE TABLE IF NOT EXISTS users (
-    
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,

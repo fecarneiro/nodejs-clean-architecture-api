@@ -23,4 +23,4 @@ export function restrictToAdmin(req, res, next) {
     next();
 }
 
-export default checkRolePermission;
+export default restrictToAdmin;
