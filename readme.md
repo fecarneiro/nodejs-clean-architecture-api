@@ -1,13 +1,13 @@
-# **Documentação do Projeto Backend**
+# **Backend Project Documentation**
 
-## **Descrição**
-Este projeto é uma API backend construída com Node.js e SQLite, que oferece funcionalidades de autenticação, gerenciamento de usuários, posts e comentários. A API utiliza autenticação baseada em JWT para proteger rotas específicas. Além disso, o projeto implementa um sistema de controle de acesso baseado em papéis (**RBAC**) com dois papéis principais: **ADMIN** e **USER**.
+## **Description**
+This project is a backend API built with Node.js and SQLite, offering authentication, user management, posts, and comments functionalities. The API uses JWT-based authentication to protect specific routes. Additionally, the project implements a role-based access control (**RBAC**) system with two main roles: **ADMIN** and **USER**.
 
 ---
 
-## **Estrutura do Projeto**
+## **Project Structure**
 
-A estrutura do projeto está organizada da seguinte forma:
+The project structure is organized as follows:
 
 ```
 CRUD/
@@ -41,184 +41,144 @@ CRUD/
 
 ---
 
-## **Configuração e Instalação**
+## **Setup and Installation**
 
-1. **Pré-requisitos**:
-   - Node.js instalado (versão 16 ou superior).
-   - SQLite3 instalado no sistema ou incluído como dependência.
-   - Gerenciador de pacotes `bun` instalado (opcional).
+1. **Prerequisites**:
+  - Node.js installed (version 16 or higher).
+  - SQLite3 installed on the system or included as a dependency.
+  - `bun` package manager installed (optional).
 
-2. **Clonar o Repositório**:
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd backend
-   ```
+2. **Clone the Repository**:
+  ```bash
+  git clone <REPOSITORY_URL>
+  cd backend
+  ```
 
-3. **Instalar Dependências**:
-   ```bash
-   npm install
-   ```
+3. **Install Dependencies**:
+  ```bash
+  npm install
+  ```
 
-4. **Configuração do Ambiente**:
-   Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-   ```
-   JWT_SECRET=<sua_chave_secreta>
-   JWT_EXPIRATION=1000h
-   ```
+4. **Environment Configuration**:
+  Create a `.env` file at the root of the project with the following variables:
+  ```
+  JWT_SECRET=<your_secret_key>
+  JWT_EXPIRATION=1000h
+  ```
 
-5. **Iniciar o Servidor**:
-   - Com `bun`:
-     ```bash
-     bun run dev
-     ```
-   - Com `npm`:
-     ```bash
-     npm run dev
-     ```
+5. **Start the Server**:
+  - With `bun`:
+    ```bash
+    bun run dev
+    ```
+  - With `npm`:
+    ```bash
+    npm run dev
+    ```
 
-6. O servidor estará rodando em: `http://localhost:3000`.
+6. The server will be running at: `http://localhost:3000`.
 
 ---
 
-## **Controle de Acesso Baseado em Papéis (RBAC)**
+## **Role-Based Access Control (RBAC)**
 
-### **Papéis Disponíveis**
+### **Available Roles**
 1. **ADMIN**  
-   - Acesso total a todas as rotas e ações: `create`, `read`, `update`, `delete`.
-   - Pode acessar rotas exclusivas, como a rota que lista todos os usuários.
+  - Full access to all routes and actions: `create`, `read`, `update`, `delete`.
+  - Can access exclusive routes, such as the route that lists all users.
 
 2. **USER**  
-   - Pode acessar todas as rotas comuns, como criar posts, ler posts e atualizar alguns recursos.
-   - Não pode acessar rotas restritas a administradores, por exemplo, a rota de listagem de todos os usuários.
+  - Can access all common routes, such as creating posts, reading posts, and updating some resources.
+  - Cannot access routes restricted to administrators, for example, the route listing all users.
 
 ---
 
-## **Rotas da API**
+## **API Routes**
 
-### **1. Rotas de Usuários (`/users`)**
+### **1. User Routes (`/users`)**
 #### **POST /signup**
-- **Descrição**: Registra um novo usuário.
+- **Description**: Registers a new user.
 - **Body**:
   ```json
   {
-    "username": "string",
-    "password": "string"
+   "username": "string",
+   "password": "string"
   }
   ```
-- **Resposta**: 
+- **Response**: 
   ```json
   {
+   "id": "number",
+   "username": "string",
+   "role": "string"
+  }
+  ```
+  By default, if no role is specified, the `role` value will be `"user"`.
+
+#### **POST /signin**
+- **Description**: Authenticates an existing user.
+- **Body**:
+  ```json
+  {
+   "username": "string",
+   "password": "string"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+   "message": "Login successful",
+   "token": "string",
+   "user": {
     "id": "number",
     "username": "string",
     "role": "string"
-  }
-  ```
-  Por padrão, se nenhum papel for especificado, o valor de `role` será `"user"`.
-
-#### **POST /signin**
-- **Descrição**: Autentica um usuário existente.
-- **Body**:
-  ```json
-  {
-    "username": "string",
-    "password": "string"
-  }
-  ```
-- **Resposta**:
-  ```json
-  {
-    "message": "Login bem-sucedido",
-    "token": "string",
-    "user": {
-      "id": "number",
-      "username": "string",
-      "role": "string"
-    }
+   }
   }
   ```
 
 #### **GET /**
-- **Descrição**: Lista todos os usuários (rota protegida, apenas para ADMIN).
+- **Description**: Lists all users (protected route, ADMIN only).
 - **Headers**:
   ```
   Authorization: Bearer <token>
   ```
-- **Resposta (para ADMIN)**:
+- **Response (for ADMIN)**:
   ```json
   [
-    {
-      "id": "number",
-      "username": "string",
-      "role": "string"
-    }
-  ]
-  ```
-- **Erro (para USER)**:
-  ```json
-  {
-    "error": "Acesso negado! Apenas administradores podem acessar esta rota."
-  }
-  ```
-
----
-
-### **2. Rotas de Posts (`/posts`)**
-#### **GET /**
-- **Descrição**: Lista todos os posts com informações do autor.
-- **Resposta**:
-  ```json
-  [
-    {
-      "id": "number",
-      "content": "string",
-      "user_id": "number",
-      "username": "string"
-    }
-  ]
-  ```
-
-#### **POST /**
-- **Descrição**: Cria um novo post (rota protegida).
-- **Headers**:
-  ```
-  Authorization: Bearer <token>
-  ```
-- **Body**:
-  ```json
-  {
-    "content": "string"
-  }
-  ```
-- **Resposta**:
-  ```json
-  {
+   {
     "id": "number",
-    "user_id": "number",
     "username": "string",
-    "content": "string"
+    "role": "string"
+   }
+  ]
+  ```
+- **Error (for USER)**:
+  ```json
+  {
+   "error": "Access denied! Only administrators can access this route."
   }
   ```
 
 ---
 
-### **3. Rotas de Comentários (`/comments`)**
+### **2. Post Routes (`/posts`)**
 #### **GET /**
-- **Descrição**: Lista todos os comentários com informações do autor e post relacionado.
-- **Resposta**:
+- **Description**: Lists all posts with author information.
+- **Response**:
   ```json
   [
-    {
-      "id": "number",
-      "content": "string",
-      "post_id": "number",
-      "user_id": "number",
-      "username": "string"
-    }
+   {
+    "id": "number",
+    "content": "string",
+    "user_id": "number",
+    "username": "string"
+   }
   ]
   ```
 
 #### **POST /**
-- **Descrição**: Cria um novo comentário em um post (rota protegida).
+- **Description**: Creates a new post (protected route).
 - **Headers**:
   ```
   Authorization: Bearer <token>
@@ -226,177 +186,239 @@ CRUD/
 - **Body**:
   ```json
   {
-    "post_id": "number",
-    "content": "string"
+   "content": "string"
   }
   ```
-- **Resposta**:
+- **Response**:
   ```json
   {
-    "id": "<number>",
-    "post_id": "<post_id>",
-    "user_id": "<user_id>",
-    "username": "<username>",
-    "content": "<content>"
+   "id": "number",
+   "user_id": "number",
+   "username": "string",
+   "content": "string"
   }
   ```
 
 ---
 
-## **Banco de Dados**
+### **3. Comment Routes (`/comments`)**
+#### **GET /**
+- **Description**: Lists all comments with author and related post information.
+- **Response**:
+  ```json
+  [
+   {
+    "id": "number",
+    "content": "string",
+    "post_id": "number",
+    "user_id": "number",
+    "username": "string"
+   }
+  ]
+  ```
 
-O banco de dados utiliza SQLite e é inicializado automaticamente no arquivo `database.js`. As tabelas são criadas se não existirem.
-
-### Estrutura das Tabelas
-
-1. Tabela `users`:
-   - `id`: Chave primária.
-   - `username`: Nome único do usuário.
-   - `password`: Senha criptografada.
-   - `role`: Papel do usuário no sistema (`admin` ou `user`).
-
-2. Tabela `posts`:
-   - `id`: Chave primária.
-   - `user_id`: Relacionamento com a tabela `users`.
-   - `content`: Conteúdo do post.
-
-3. Tabela `comments`:
-   - `id`: Chave primária.
-   - `post_id`: Relacionamento com a tabela `posts`.
-   - `user_id`: Relacionamento com a tabela `users`.
-   - `content`: Conteúdo do comentário.
-
+#### **POST /**
+- **Description**: Creates a new comment on a post (protected route).
+- **Headers**:
+  ```
+  Authorization: Bearer <token>
+  ```
+- **Body**:
+  ```json
+  {
+   "post_id": "number",
+   "content": "string"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+   "id": "<number>",
+   "post_id": "<post_id>",
+   "user_id": "<user_id>",
+   "username": "<username>",
+   "content": "<content>"
+  }
+  ```
 
 ---
 
-## **Repositórios**
+## **Database**
 
-A pasta `repositories` contém a implementação do padrão de repositório, que abstrai a lógica de acesso a dados e facilita a manutenção e testes do código.
+The database uses SQLite and is automatically initialized in the `database.js` file. Tables are created if they do not exist.
 
-### Estrutura da Pasta `repositories`
+### Table Structure
+
+1. `users` table:
+  - `id`: Primary key.
+  - `username`: Unique username.
+  - `password`: Encrypted password.
+  - `role`: User role in the system (`admin` or `user`).
+
+2. `posts` table:
+  - `id`: Primary key.
+  - `user_id`: Relationship with the `users` table.
+  - `content`: Post content.
+
+3. `comments` table:
+  - `id`: Primary key.
+  - `post_id`: Relationship with the `posts` table.
+  - `user_id`: Relationship with the `users` table.
+  - `content`: Comment content.
+
+---
+
+## **Repositories**
+
+The `repositories` folder contains the implementation of the repository pattern, which abstracts data access logic and facilitates code maintenance and testing.
+
+### `repositories` Folder Structure
 
 1. **`base.repository.js`**:
-   - Classe base que define métodos comuns para todos os repositórios.
+  - Base class defining common methods for all repositories.
 
 2. **`comment.repository.js`**:
-   - Repositório específico para a tabela `comments`.
-   - Métodos para criar e listar comentários, incluindo informações relacionadas de `users` e `posts`.
+  - Specific repository for the `comments` table.
+  - Methods to create and list comments, including related information from `users` and `posts`.
 
 3. **`post.repository.js`**:
-   - Repositório específico para a tabela `posts`.
-   - Métodos para criar e listar posts, incluindo informações do autor.
+  - Specific repository for the `posts` table.
+  - Methods to create and list posts, including author information.
 
 4. **`user.repository.js`**:
-   - Repositório específico para a tabela `users`.
-   - Métodos para criar, listar e autenticar usuários.
+  - Specific repository for the `users` table.
+  - Methods to create, list, and authenticate users.
 
+---
+## **Controllers**
+// DRAFT
+- Dependencies injection
+- db → PostRepository → PostController → Routes
+
+
+.....
+.....
+.....
+.....
+.....
+.....
+.....
+.....
+.....
+.....
+Flow Summary
+Request →
+Route Handler →
+Verify Token Middleware →
+Controller Method →
+Repository Method →
+Database →
+Response Back Through Chain
 ---
 
 ## **Utils**
 
-### Arquivo: `utils/auth.js`
-O arquivo `auth.js`, localizado na pasta `utils/`, contém funções relacionadas à autenticação utilizando JWT.
+### File: `utils/auth.js`
+The `auth.js` file, located in the `utils/` folder, contains functions related to JWT authentication.
 
-#### Funções Disponíveis
+#### Available Functions
 
 1. **`generateToken(user)`**
-   - Gera um token JWT para autenticação.
-   - Parâmetros: Objeto contendo as informações do usuário (exemplo: `{ id, username, role }`).
-   - Retorno: Um token JWT assinado como string.
+  - Generates a JWT token for authentication.
+  - Parameters: Object containing user information (e.g., `{ id, username, role }`).
+  - Returns: A signed JWT token as a string.
 
 2. **`verifyToken(req, res, next)`**
-   - Middleware para verificar a validade de um token JWT enviado no cabeçalho da requisição.
-     - Verifica se o cabeçalho contém um token no formato correto (`Bearer <token>`).
-     - Decodifica e valida o token usando a chave secreta definida em `.env`.
-     - Adiciona as informações do usuário decodificado (`req.user`) à requisição para uso posterior.
-     - Respostas possíveis:
-       - Erro `401`: Token não fornecido ou inválido.
-       - Erro `403`: Token inválido ou expirado.
+  - Middleware to verify the validity of a JWT token sent in the request header.
+    - Checks if the header contains a token in the correct format (`Bearer <token>`).
+    - Decodes and validates the token using the secret key defined in `.env`.
+    - Adds the decoded user information (`req.user`) to the request for later use.
+    - Possible responses:
+     - Error `401`: Token not provided or invalid.
+     - Error `403`: Token invalid or expired.
 
-#### Exemplo de Uso em Rotas
+#### Example Usage in Routes
 
 ```javascript
 import { verifyToken } from '../utils/auth.js';
 
-router.get('/rota-protegida', verifyToken, (req, res) => {
-    res.json({ message: 'Acesso permitido!', user: req.user });
+router.get('/protected-route', verifyToken, (req, res) => {
+   res.json({ message: 'Access granted!', user: req.user });
 });
 ```
 
 ---
 
-## **Arquivo de Papéis (roles.js)**
+## **Roles File (roles.js)**
 
-#### Arquivo: `src/roles.js`
-Define os papéis e suas permissões. Para este projeto, existem apenas dois papéis:
+#### File: `src/roles.js`
+Defines roles and their permissions. For this project, there are only two roles:
 
 ```javascript
 export const roles = {
-    admin: ['create', 'read', 'update', 'delete'],
-    user: ['create', 'read', 'update']
+   admin: ['create', 'read', 'update', 'delete'],
+   user: ['create', 'read', 'update']
 };
 ```
-- `admin`: Tem acesso total a todas as rotas.
-- `user`: Pode criar, ler e atualizar, mas não pode acessar rotas exclusivas de `admin`.
+- `admin`: Has full access to all routes.
+- `user`: Can create, read, and update, but cannot access `admin` exclusive routes.
 
 ---
 
-## **Middleware RBAC**
+## **RBAC Middleware**
 
-#### Arquivo: `src/middlewares/rbac.js`
-Implementa o controle de acesso baseado em papéis:
+#### File: `src/middlewares/rbac.js`
+Implements role-based access control:
 
 ```javascript
 import { roles } from '../roles.js';
 
 export function checkRolePermission(action) {
-    return (req, res, next) => {
-        const userRole = req.user?.role;
-        if (!roles[userRole] || !roles[userRole].includes(action)) {
-            return res.status(403).json({ error: 'Acesso negado! Você não tem permissão para realizar esta ação.' });
-        }
-        next();
-    };
+   return (req, res, next) => {
+      const userRole = req.user?.role;
+      if (!roles[userRole] || !roles[userRole].includes(action)) {
+        return res.status(403).json({ error: 'Access denied! You do not have permission to perform this action.' });
+      }
+      next();
+   };
 }
 
 export function restrictToAdmin(req, res, next) {
-    const userRole = req.user?.role;
-    if (userRole !== 'admin') {
-        return res.status(403).json({ error: 'Acesso negado! Apenas administradores podem acessar esta rota.' });
-    }
-    next();
+   const userRole = req.user?.role;
+   if (userRole !== 'admin') {
+      return res.status(403).json({ error: 'Access denied! Only administrators can access this route.' });
+   }
+   next();
 }
 
 export default checkRolePermission;
 ```
 
-- **`checkRolePermission(action)`**: Verifica se o papel do usuário (`userRole`) possui permissão para a ação solicitada (`create`, `read`, `update`, `delete`).
-- **`restrictToAdmin(req, res, next)`**: Bloqueia o acesso caso o papel do usuário não seja `admin`.
+- **`checkRolePermission(action)`**: Checks if the user's role (`userRole`) has permission for the requested action (`create`, `read`, `update`, `delete`).
+- **`restrictToAdmin(req, res, next)`**: Blocks access if the user's role is not `admin`.
 
 ---
 
-## **Dependências**
+## **Dependencies**
 
-### Produção:
-- `express`: Framework para construção da API.
-- `sqlite3`: Banco de dados embutido.
-- `bcrypt`: Hashing de senhas.
-- `jsonwebtoken`: Geração e validação de tokens JWT.
-- `dotenv`: Gerenciamento de variáveis de ambiente.
+### Production:
+- `express`: Framework for building the API.
+- `sqlite3`: Embedded database.
+- `bcrypt`: Password hashing.
+- `jsonwebtoken`: JWT generation and validation.
+- `dotenv`: Environment variable management.
 
-### Desenvolvimento:
-- `@playwright/test`: Testes automatizados.
-- `@types/node`: Tipagem para Node.js.
+### Development:
+- `@playwright/test`: Automated testing.
+- `@types/node`: Type definitions for Node.js.
 
 ---
 
-## **Testes**
+## **Tests**
 
-Os testes estão localizados na pasta `/tests`. Para executar testes automatizados (se configurados):
+Tests are located in the `/tests` folder. To run automated tests (if configured):
 ```bash
 npx playwright test
 ```
 
 ---
-
-Este documento consolida todas as funcionalidades do projeto, incluindo o sistema de autenticação JWT, o controle de acesso baseado em papéis (RBAC) e as rotas criadas para gerenciar usuários, posts e comentários. Sinta-se livre para adaptar ou estender a implementação conforme necessário!

@@ -3,7 +3,7 @@ import { BaseRepository } from './base.repository.js';
 class CommentRepository extends BaseRepository {
 
     constructor(db) {
-        super('comments', db);
+        super('comments', db); // Calls BaseRepository constructor
     }
 
     // Method to create a new comment
