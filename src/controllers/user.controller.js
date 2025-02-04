@@ -1,9 +1,11 @@
+import { generateToken } from '../utils/auth.js';
+
 class UserController {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
 
-    // Method to create a account (sign up)
+    // Method to sign up
     async create(req, res) {
         const { username, password, role = 'user' } = req.body;
 
@@ -23,7 +25,7 @@ class UserController {
         }
     };
 
-    // Method to login (sign in, generates JWT)
+    // Method to sign in, generates JWT
     async signIn(req, res) {
         const { username, password } = req.body;
 
