@@ -9,7 +9,7 @@ const db = new Database('./database.db', (err) => {
     }
 });
 
-// 'users' table
+// users table
 db.run(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +19,7 @@ db.run(`
     )
 `);
 
-// 'posts' table
+// posts table
 db.run(`
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +29,7 @@ db.run(`
     )
 `);
 
-// 'comments' table
+// comments table
 db.run(`
     CREATE TABLE IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

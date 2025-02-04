@@ -6,7 +6,7 @@ class UserRepository extends BaseRepository {
         super('users', db);
     }
 
-    // Method to create a new account
+    // Method to create a new account (with encrypted password)
     createUser(username, password, role = 'user') {
         return new Promise((resolve, reject) => {
             const query = `INSERT INTO ${this.tableName} (username, password, role) VALUES (?, ?, ?)`;
@@ -24,7 +24,7 @@ class UserRepository extends BaseRepository {
         });
     }
 
-    // Method for user login
+    // Method for credentials verification
     findByCredentials(username, password) {
         return new Promise((resolve, reject) => {
             const query = `SELECT * FROM ${this.tableName} WHERE username = ?`;
@@ -32,7 +32,6 @@ class UserRepository extends BaseRepository {
                 if (err) {
                     return reject(err);
                 }
-                // Code is executed if credentials are found in the DB
                 if (row) {
                     bcrypt.compare(password, row.password, (err, result) => {
                         if (err) {
@@ -51,7 +50,7 @@ class UserRepository extends BaseRepository {
         });
     }
 
-    // Method to list all users
+    // Method to list all accounts
     findAll() {
         return new Promise((resolve, reject) => {
             const query = `SELECT * FROM ${this.tableName}`;

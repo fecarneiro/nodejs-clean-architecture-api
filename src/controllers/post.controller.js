@@ -2,8 +2,8 @@ class PostController {
     constructor(postRepository) {
         this.postRepository = postRepository;
     }
-
-    // Create post method
+    
+    // Method to create new post
     async create(req, res) {
         const { content } = req.body;
         const user_id = req.user.id;
@@ -21,7 +21,7 @@ class PostController {
         }
     }
 
-    // List all post method
+    // Method to list all posts
     async findAll(req, res) {
         try {
             const posts = await this.postRepository.findAll();

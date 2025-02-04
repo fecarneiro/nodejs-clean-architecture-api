@@ -3,12 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Função para gerar um token JWT
+// Function to generate JWT when signing in
 export function generateToken(user) {
     const payload = {
         id: user.id,
         username: user.username,
-        role: user.role // Adiciona o papel ao token
+        role: user.role
     };
 
     return jwt.sign(payload, process.env.JWT_SECRET, {
@@ -16,25 +16,25 @@ export function generateToken(user) {
     });
 }
 
-// Middleware verify token
+// Verify token middleware
 export const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    // Verifica se o token foi enviado no cabeçalho e no formato correto
+    // Checks if the token was sent in the header and in the correct format
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Token não fornecido ou inválido'});
+        return res.status(401).json({ error: 'Token not provided or invalid' });
     }
     
-    // Extrai o token do cabeçalho Authorization (remove "Bearer ")
+    // Extracts the token from the Authorization header (removes "Bearer ")
     const token = authHeader.split(' ')[1];
 
     try {
-        // Verifica e decodifica o token usando a chave secreta
+        // Verifies and decodes the token using the secret key
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-         // Adiciona as informações do usuário na requisição para uso posterior
+        // Adds the user information to the request for later use
         req.user = decoded;
-        // Prossegue para o próximo middleware ou controlador
+        // Proceeds to the next middleware or controller
         next();
     } catch (err) {
-        return res.status(403).json({ error: 'Token inválido ou expirado' });
+        return res.status(403).json({ error: 'Invalid or expired token' });
     }
 };
