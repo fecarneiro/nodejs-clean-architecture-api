@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import db from '../database.js';
 import { verifyToken } from '../utils/auth.js';
 import PostRepository from '../repositories/post.repository.js';
 import PostController from '../controllers/post.controller.js';
