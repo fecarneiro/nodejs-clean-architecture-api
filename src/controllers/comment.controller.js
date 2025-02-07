@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 37a2cdd (fix: controllers, repositories)
 class CommentController {
     constructor(commentRepository) {
         this.commentRepository = commentRepository;
@@ -13,7 +16,11 @@ class CommentController {
         }
 
         try {
+<<<<<<< HEAD
             const comment = await this.commentRepository.createComment(post_id, user_id, content);
+=======
+            const comment = await this.commentRepository.create(post_id, user_id, content);
+>>>>>>> 37a2cdd (fix: controllers, repositories)
             res.status(201).json(comment);
         } catch (error) {
             console.error('Error creating comment:', error);
@@ -33,5 +40,9 @@ class CommentController {
     };
 }
 
+<<<<<<< HEAD
 export default CommentController;
 
+=======
+export default CommentController;
+>>>>>>> 37a2cdd (fix: controllers, repositories)

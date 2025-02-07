@@ -14,7 +14,11 @@ class UserController {
         }
 
         try {
+<<<<<<< HEAD
             const user = await this.userRepository.createUser(username, password, role);
+=======
+            const user = await this.userRepository.create(username, password, role);
+>>>>>>> 37a2cdd (fix: controllers, repositories)
             res.status(201).json(user);
         } catch (error) {
             if (error.message.includes('UNIQUE constraint failed')) {
