@@ -7,11 +7,7 @@ class UserRepository extends BaseRepository {
     }
 
     // Method to create a new account (with encrypted password)
-<<<<<<< HEAD
-    createUser(username, password, role = 'user') {
-=======
     create(username, password, role = 'user') {
->>>>>>> 37a2cdd (fix: controllers, repositories)
         return new Promise((resolve, reject) => {
             const query = `INSERT INTO ${this.tableName} (username, password, role) VALUES (?, ?, ?)`;
             bcrypt.hash(password, 10, (err, hashedPassword) => {

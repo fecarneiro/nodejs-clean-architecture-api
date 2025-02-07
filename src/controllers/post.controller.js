@@ -13,11 +13,7 @@ class PostController {
         }
 
         try {
-<<<<<<< HEAD
-            const post = await this.postRepository.createPost(user_id, content);
-=======
             const post = await this.postRepository.create(user_id, content);
->>>>>>> 37a2cdd (fix: controllers, repositories)
             return res.status(201).json(post);
         } catch (error) {
             console.error('Error creating post:', error);

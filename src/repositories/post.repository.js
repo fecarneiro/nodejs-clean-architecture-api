@@ -1,20 +1,13 @@
 import { BaseRepository } from './base.repository.js';
 
 class PostRepository extends BaseRepository {
-<<<<<<< HEAD
-=======
     
->>>>>>> 37a2cdd (fix: controllers, repositories)
     constructor(db) {
         super('posts', db);
     }
 
     // Method to create a new post
-<<<<<<< HEAD
-    createPost(user_id, content) {
-=======
     create(user_id, content) {
->>>>>>> 37a2cdd (fix: controllers, repositories)
         return new Promise((resolve, reject) => {
             const query = `INSERT INTO ${this.tableName} (user_id, content) VALUES (?, ?)`;
             this.db.run(query, [user_id, content], function (err) {

@@ -7,11 +7,7 @@ class CommentRepository extends BaseRepository {
     }
 
     // Method to create a new comment
-<<<<<<< HEAD
-    createComment(post_id, user_id, content) {
-=======
     create(post_id, user_id, content) {
->>>>>>> 37a2cdd (fix: controllers, repositories)
         return new Promise((resolve, reject) => {
             
             const query = `
