@@ -11,38 +11,33 @@ import userRoutes from './routes/users.js';
 import postRoutes from './routes/posts.js';
 import commentRoutes from './routes/comments.js';
 
-// Function from dotenv package to provide variables from .env
-dotenv.config();
 
+// Configuring the express server and variables
 const app = express();
-
-// Middleware → parse JSON
+dotenv.config();
 app.use(express.json());
 
-// Creating the database connection
+
+// Initializing the database
 const db = new sqlite3.Database('./database.db');
 
-// Creating the repository with the database connection
+
+// Creating instances of the repositories and controllers
 const userRepository = new UserRepository(db);
 const postRepository = new PostRepository(db);
 const commentRepository = new CommentRepository(db);
-
-// Creating controllers with the repository
 const userController = new UserController(userRepository);
 const postController = new PostController(postRepository);
 const commentController = new CommentController(commentRepository);
 
-// Middleware → Routes with controller injetcted
+
+// Configuring the routes
 app.use('/users', userRoutes(userController));
 app.use('/posts', postRoutes(postController));
 app.use('/comments', commentRoutes(commentController));
 
-// Middleware → Root route
-app.get('/', (req, res) => {
-    res.status(200).send('API is running!');
-});
 
-// Server port
+// Initializing the server
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

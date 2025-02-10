@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { verifyToken } from '../utils/auth.js';
+import { verifyToken } from '../middlewares/auth.js';
 
 export default function commentRoutes(commentController) {
     const router = Router();

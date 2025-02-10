@@ -1,4 +1,4 @@
-import { generateToken } from '../utils/auth.js';
+import { generateToken } from '../middlewares/auth.js';
 
 class UserController {
     constructor(userRepository) {
@@ -7,16 +7,22 @@ class UserController {
 
     // Method to sign up
     async create(req, res) {
+        // Extract username, password and role from request body
         const { username, password, role = 'user' } = req.body;
 
-        if (!username || !password) {
+        // Check if username and password are provided
+        if (!username && !password) {
             return res.status(400).json({ error: 'Username and password are required.' });
         }
 
         try {
+            //Call the create method from the UserRepository
             const user = await this.userRepository.create(username, password, role);
+            //Success response
             res.status(201).json(user);
         } catch (error) {
+
+            //Treatment of errors
             if (error.message.includes('UNIQUE constraint failed')) {
                 return res.status(400).json({ error: 'Username is already taken.' });
             }
@@ -44,6 +50,44 @@ class UserController {
         } catch (error) {
             console.error('Error authenticating user:', error);
             res.status(500).json({ error: 'Error authenticating user.' });
+        }
+    };
+
+    // Method to delete a user (admin)
+    async delete(req, res) {
+        const { id } = req.params;
+
+        try {
+            const user = await this.userRepository.delete(id);
+            if (!user) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            res.status(500).json({ error: 'Error deleting user.' });
+        }
+    };
+
+    // Method to update an account (username and role are required)
+    async update(req, res) {
+        const { id } = req.params;
+        const { username, role } = req.body;
+
+        // Validate required fields
+        if (!username || !role) {
+            return res.status(400).json({ error: 'Username and role are required.' });
+        }
+
+        try {
+            const user = await this.userRepository.update(id, username, role);
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error updating user:', error);
+            if (error.message === 'User not found.') {
+                return res.status(404).json({ error: error.message });
+            }
+            res.status(500).json({ error: 'Error updating user.' });
         }
     };
 

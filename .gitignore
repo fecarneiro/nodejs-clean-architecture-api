@@ -1,8 +1,5 @@
-# Arquivos ignorados pelo Git
+# Files ignored by Git
 node_modules/
-/test-results/
-/playwright-report/
 /blob-report/
-/playwright/.cache/
 dist/
 coverage/

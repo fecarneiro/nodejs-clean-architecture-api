@@ -9,15 +9,19 @@ class UserRepository extends BaseRepository {
     // Method to create a new account (with encrypted password)
     create(username, password, role = 'user') {
         return new Promise((resolve, reject) => {
+            //Create SQL query
             const query = `INSERT INTO ${this.tableName} (username, password, role) VALUES (?, ?, ?)`;
+            //Encrypt the password
             bcrypt.hash(password, 10, (err, hashedPassword) => {
                 if (err) {
                     return reject(err);
                 }
+                //Execute the query in the database SQLite
                 this.db.run(query, [username, hashedPassword, role], function (err) {
                     if (err) {
                         return reject(err);
                     }
+                    //Return the new user created
                     resolve({ id: this.lastID, username, role });
                 });
             });
@@ -46,6 +50,59 @@ class UserRepository extends BaseRepository {
                 } else {
                     resolve(null);
                 }
+            });
+        });
+    }
+
+    // Method to delete an account
+    delete(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
+            this.db.run(query, [id], function (err) {
+                if (err) {
+                    return reject(err);
+                }
+                if (this.changes === 0) {
+                    return reject(new Error('User not found.'));
+                }
+                resolve({ id });
+            });
+        });
+    }
+
+    //Method to update an account
+    update(id, username, role) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE ${this.tableName} SET username = ?, role = ? WHERE id = ?`;
+            this.db.run(query, [username, role, id], function (err) {
+                if (err) {
+                    return reject(err);
+                }
+                if (this.changes === 0) {
+                    return reject(new Error('User not found.'));
+                }
+                resolve({ id, username, role });
+            });
+        });
+    }
+
+    // Method to update an account (username, role)
+    update(id, username, role) {
+        return new Promise((resolve, reject) => {
+            // Validate required fields
+            if (!username || !role) {
+                return reject(new Error('Username and role are required.'));
+            }
+
+            const query = `UPDATE ${this.tableName} SET username = ?, role = ? WHERE id = ?`;
+            this.db.run(query, [username, role, id], function (err) {
+                if (err) {
+                    return reject(err);
+                }
+                if (this.changes === 0) {
+                    return reject(new Error('User not found.'));
+                }
+                resolve({ id, username, role});
             });
         });
     }
