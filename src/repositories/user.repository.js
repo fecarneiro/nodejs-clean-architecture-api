@@ -54,34 +54,16 @@ class UserRepository extends BaseRepository {
         });
     }
 
-    // Method to delete an account
-    delete(id) {
+    // Method to list all accounts
+    findAll() {
         return new Promise((resolve, reject) => {
-            const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
-            this.db.run(query, [id], function (err) {
+            const query = `SELECT * FROM ${this.tableName}`;
+            this.db.all(query, [], (err, rows) => {
                 if (err) {
+                    console.error('Error fetching users:', err);
                     return reject(err);
                 }
-                if (this.changes === 0) {
-                    return reject(new Error('User not found.'));
-                }
-                resolve({ id });
-            });
-        });
-    }
-
-    //Method to update an account
-    update(id, username, role) {
-        return new Promise((resolve, reject) => {
-            const query = `UPDATE ${this.tableName} SET username = ?, role = ? WHERE id = ?`;
-            this.db.run(query, [username, role, id], function (err) {
-                if (err) {
-                    return reject(err);
-                }
-                if (this.changes === 0) {
-                    return reject(new Error('User not found.'));
-                }
-                resolve({ id, username, role });
+                resolve(rows);
             });
         });
     }
@@ -107,16 +89,18 @@ class UserRepository extends BaseRepository {
         });
     }
 
-    // Method to list all accounts
-    findAll() {
+    // Method to delete an account
+    delete(id) {
         return new Promise((resolve, reject) => {
-            const query = `SELECT * FROM ${this.tableName}`;
-            this.db.all(query, [], (err, rows) => {
+            const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
+            this.db.run(query, [id], function (err) {
                 if (err) {
-                    console.error('Error fetching users:', err);
                     return reject(err);
                 }
-                resolve(rows);
+                if (this.changes === 0) {
+                    return reject(new Error('User not found.'));
+                }
+                resolve({ id });
             });
         });
     }

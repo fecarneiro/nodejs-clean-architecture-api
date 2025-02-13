@@ -50,6 +50,34 @@ class CommentRepository extends BaseRepository {
             });
         });
     }
+
+    // Method to update a comment
+    update(id, content) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE ${this.tableName} SET content = ? WHERE id = ?`;
+            this.db.run(query, [content, id], function (err) {
+                if (err) {
+                    console.error('Error updating comment:', err);
+                    return reject(new Error('Error updating comment.'));
+                }
+                resolve({ id, content });
+            });
+        });
+    }
+
+    // Method to delete a comment
+    delete(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
+            this.db.run(query, [id], function (err) {
+                if (err) {
+                    console.error('Error deleting comment:', err);
+                    return reject(new Error('Error deleting comment.'));
+                }
+                resolve({ id });
+            });
+        });
+    }
 }
 
 export default CommentRepository;

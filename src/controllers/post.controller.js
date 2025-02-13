@@ -31,6 +31,37 @@ class PostController {
             return res.status(500).json({ error: 'Error listing posts.' });
         }
     }
+
+    // Method to update post
+    async update(req, res) {
+        const { id } = req.params;
+        const { content } = req.body;
+
+        if (!content) {
+            return res.status(400).json({ error: 'Content is required.' });
+        }
+
+        try {
+            const post = await this.postRepository.update(id, content);
+            return res.status(200).json(post);
+        } catch (error) {
+            console.error('Error updating post:', error);
+            return res.status(500).json({ error: 'Error updating post.' });
+        }
+    }
+
+    // Method to delete post
+    async delete(req, res) {
+        const { id } = req.params;
+
+        try {
+            const post = await this.postRepository.delete(id);
+            return res.status(200).json(post);
+        } catch (error) {
+            console.error('Error deleting post:', error);
+            return res.status(500).json({ error: 'Error deleting post.' });
+        }
+    }
 }
 
 export default PostController;

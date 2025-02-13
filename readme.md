@@ -7,7 +7,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/CRUD)
+![GitHub last commit](https://img.shields.io/github/last-commit/feelipino/CRUD)
 </div>
 
 ## **🎯 Overview**

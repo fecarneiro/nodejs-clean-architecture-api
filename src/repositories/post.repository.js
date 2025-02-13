@@ -37,6 +37,34 @@ class PostRepository extends BaseRepository {
             });
         });
     }
+
+    // Method to update a post
+    update(id, content) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE ${this.tableName} SET content = ? WHERE id = ?`;
+            this.db.run(query, [content, id], function (err) {
+                if (err) {
+                    console.error('Error updating post:', err);
+                    return reject(new Error('Error updating post.'));
+                }
+                resolve({ id, content });
+            });
+        });
+    }
+
+    // Method to delete a post
+    delete(id) {
+        return new Promise((resolve, reject) => {
+            const query = `DELETE FROM ${this.tableName} WHERE id = ?`;
+            this.db.run(query, [id], function (err) {
+                if (err) {
+                    console.error('Error deleting post:', err);
+                    return reject(new Error('Error deleting post.'));
+                }
+                resolve({ id });
+            });
+        });
+    }
 }
 
 export default PostRepository;

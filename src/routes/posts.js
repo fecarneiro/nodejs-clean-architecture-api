@@ -10,6 +10,12 @@ export default function postRoutes(postController) {
     // List all posts - needs JWT validation
     router.get('/', verifyToken, (req, res) => postController.findAll(req, res));
 
+    // Update post - needs JWT validation
+    router.put('/', verifyToken, (req, res) => postController.update(req, res));
+
+    // Delete post - needs JWT validation
+    router.delete('/', verifyToken, (req, res) => postController.delete(req, res));
+    
     return router;
 }
 
