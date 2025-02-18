@@ -3,18 +3,19 @@ import { verifyToken } from '../middlewares/auth.js';
 
 export default function commentRoutes(commentController) {
     const router = Router();
+    router.use(verifyToken);
 
-    // Create new comment - needs JWT validation
-    router.post('/', verifyToken, async (req, res) => commentController.create(req, res));
+    // Create new comment
+    router.post('/', async (req, res) => commentController.create(req, res));
 
-    // List all comments - needs JWT validation
-    router.get('/', verifyToken, async (req, res) => commentController.findAll(req, res));
+    // List all comments
+    router.get('/', async (req, res) => commentController.findAll(req, res));
 
-    // Update comment - needs JWT validation
-    router.put('/:id', verifyToken, async (req, res) => commentController.update(req, res));
+    // Update comment
+    router.put('/:id', async (req, res) => commentController.update(req, res));
 
-    // Delete comment - needs JWT validation
-    router.delete('/:id', verifyToken, async (req, res) => commentController.delete(req, res));
+    // Delete comment
+    router.delete('/:id', async (req, res) => commentController.delete(req, res));
 
     return router;
 }

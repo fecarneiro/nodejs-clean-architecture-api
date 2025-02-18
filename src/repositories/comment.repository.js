@@ -1,47 +1,48 @@
 import { BaseRepository } from './base.repository.js';
 
 class CommentRepository extends BaseRepository {
-
     constructor(db) {
         super('comments', db);
     }
 
-    // Method to create a new comment
-    create(post_id, user_id, content) {
+    create(user_id, post_id, content) {
         return new Promise((resolve, reject) => {
-            
-            const query = `
-                INSERT INTO ${this.tableName} (post_id, user_id, content)
-                VALUES (?, ?, ?)
-            `;
-                
-            this.db.run(query, [post_id, user_id, content], function (err) {
+            const query = `INSERT INTO ${this.tableName} (user_id, post_id, content) VALUES (?, ?, ?)`;
+            this.db.run(query, [user_id, post_id, content], function(err) {
                 if (err) {
                     console.error('Error creating comment:', err);
-                    return reject(new Error('Error creating comment.'));
+                    return reject(err);
                 }
-                resolve({ id: this.lastID, post_id, user_id, content });
+                resolve({ id: this.lastID, user_id, post_id, content });
             });
         });
     }
 
-    // Method to list all comments
     findAll() {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT 
-                    comments.id, 
-                    comments.content, 
-                    comments.post_id, 
-                    comments.user_id, 
-                    posts.content AS post_content,
-                    users.username 
+                SELECT comments.id, comments.content, comments.user_id, comments.post_id,
+                       users.username, posts.content as post_content
                 FROM ${this.tableName}
                 JOIN users ON comments.user_id = users.id
                 JOIN posts ON comments.post_id = posts.id
+                ORDER BY comments.id DESC
             `;
-            
+
             this.db.all(query, [], (err, rows) => {
+                if (err) {
+                    console.error('Error listing comments:', err);
+                    return reject(err);
+                }
+                resolve(rows);
+            });
+        });
+    }
+
+    update(id, content, user_id) {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE ${this.tableName} SET content = ? WHERE id = ? AND user_id = ?`;
+            this.db.run(query, [content, id, user_id], function(err) {
                 if (err) {
                     console.error('Error listing comments:', err);
                     return reject(err);

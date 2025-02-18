@@ -3,18 +3,20 @@ import { verifyToken } from '../middlewares/auth.js';
 
 export default function postRoutes(postController) {
     const router = Router();
+    // JWT Validation for all endpoints
+    router.use(verifyToken);
+    
+    // Create new post
+    router.post('/', async (req, res) => postController.create(req, res));
 
-    // Create new post - needs JWT validation
-    router.post('/', verifyToken, (req, res) => postController.create(req, res));
+    // List all posts
+    router.get('/', async (req, res) => postController.findAll(req, res));
 
-    // List all posts - needs JWT validation
-    router.get('/', verifyToken, (req, res) => postController.findAll(req, res));
+    // Update post
+    router.put('/:id', async (req, res) => postController.update(req, res));
 
-    // Update post - needs JWT validation
-    router.put('/', verifyToken, (req, res) => postController.update(req, res));
-
-    // Delete post - needs JWT validation
-    router.delete('/', verifyToken, (req, res) => postController.delete(req, res));
+    // Delete post
+    router.delete('/:id', async (req, res) => postController.delete(req, res));
     
     return router;
 }
