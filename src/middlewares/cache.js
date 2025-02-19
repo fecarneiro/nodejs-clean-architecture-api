@@ -1,34 +1,28 @@
 import NodeCache from 'node-cache';
 
-// Cache instance initialization with 100s default TTL
-const cache = new NodeCache({ stdTTL: 100 });
+// Initialize NodeCache with a default TTL (time-to-live) of 60 seconds
+const cache = new NodeCache({ stdTTL: 60 });
 
-// Middleware
-export const cacheMiddleware = (keyPrefix) => {
-    return async (req, res, next) => {
-        try {
-            // Cache key construction
-            const cacheKey = `${keyPrefix}_${JSON.stringfy(req.params)}`;
-            // Cache validation
-            if (cache.has(cacheKey)) {
-                console.log(`[${keyPrefix}] Serving from cache`);
-                return res.json(cache.get(cacheKey));
-            }
 
-            // Storaging the cache key
-            res.locals.cacheKey = cacheKey;
-            console.log('Cached with success.')
-            next();
-        } catch (error){
-            next(error);
+export function cacheMiddleware(keyPrefix) {
+    return (req, res, next) => {
+        const key = `${keyPrefix}:${req.originalUrl}`; // Use the URL as the cache key
+        const cachedData = cache.get(key); // Attempt to retrieve data from the cache
+
+        if (cachedData) {
+            console.log(`[Cache] Hit for ${key}`);
+            return res.status(200).json(cachedData); // Return cached data if it exists
+        }
+
+        console.log(`[Cache] Miss for ${key}`);
+
+        // Intercept res.json to store the response in the cache
+        const originalJson = res.json.bind(res);
+        res.json = (data) => {
+            cache.set(key, data); // Store response in cache
+            originalJson(data); // Send response to client
         };
 
+        next();
     };
-};
-
-// Data storage in cache
-export const storeInCache = (data, cacheKey) => {
-    // Saving data with used key
-    cache.set(cacheKey, data);
-    console.log('Stored')
 }
