@@ -241,15 +241,6 @@ The API implements a caching system to improve performance, especially for frequ
 ### Response Time Monitoring
 The `responseTimeLogger` middleware measures and logs the response time of each request, helping to identify potential bottlenecks.
 
-## **🔍 Testing**
-
-To run the tests (when implemented):
-```bash
-npm test
-# or
-bun test
-```
-
 ## **🛠️ Troubleshooting**
 
 ### Invalid or expired JWT token
@@ -258,8 +249,6 @@ If you receive an "Invalid or expired token" error, log in again to obtain a new
 ### Permission denied
 Check if the user has the appropriate role (admin or user) for the operation you are trying to perform.
 
-### Corrupted database
-If the SQLite database becomes corrupted, you can delete the `database.db` file and restart the server to create a new database.
 
 ## **📄 License**
 This project is licensed under the MIT license.
