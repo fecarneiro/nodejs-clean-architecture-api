@@ -10,7 +10,7 @@ export default function postRoutes(postController) {
     // Create new post
     router.post('/', async (req, res) => postController.create(req, res));
 
-    // List all posts
+    // List all posts [with cache and response time logger]
     router.get('/', responseTimeLogger, cacheMiddleware('posts'), async (req, res) => postController.findAll(req, res));
 
     // Update post

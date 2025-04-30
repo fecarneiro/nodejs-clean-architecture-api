@@ -27,7 +27,6 @@ const userController = new UserController(userRepository);
 const postController = new PostController(postRepository);
 const commentController = new CommentController(commentRepository);
 
-
 // Configuring the routes
 app.use('/users', userRoutes(userController));
 app.use('/posts', postRoutes(postController));

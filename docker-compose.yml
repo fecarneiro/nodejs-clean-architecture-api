@@ -1,0 +1,11 @@
+version: '3'
+services:
+  blog-api:
+    build: .
+    container_name: blog-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./database.db:/usr/src/app/database.db
+    environment:
+      - NODE_ENV=production
