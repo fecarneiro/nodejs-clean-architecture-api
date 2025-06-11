@@ -72,6 +72,8 @@ CRUD/
 - Docker and Docker Compose (optional)
 - Git
 
+**Database Note:** The SQLite database file (`database.db`) will be automatically created in the root directory with the necessary tables when you first run the application. This file is intentionally not tracked by Git (via `.gitignore`) to ensure a clean setup for new clones and to avoid versioning local development data.
+
 ### Installation with Docker
 
 1. Clone the repository
