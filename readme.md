@@ -1,6 +1,6 @@
-# **Node.js Enterprise API Boilerplate**
+# **Node.js Clean Architecture API**
 
-A robust Node.js and Express.js REST API boilerplate, meticulously engineered with Clean Architecture and SOLID principles for exceptional scalability and maintainability. It features integrated JWT authentication, Role-Based Access Control (RBAC), and comprehensive CRUD operations for users, posts, and comments. This project is an ideal foundation for enterprise-level applications, showcasing strong separation of concerns, dependency injection, and data persistence with SQLite.
+A Node.js and Express.js REST API engineered with Clean Architecture and SOLID principles for exceptional scalability and maintainability. It features integrated JWT authentication, Role-Based Access Control (RBAC), and comprehensive CRUD operations for users, posts, and comments.
 
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
