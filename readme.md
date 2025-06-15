@@ -1,6 +1,6 @@
-# **Backend CRUD API with RBAC and JWT**
+# **Node.js Enterprise API Boilerplate**
 
-<div align="center">
+A robust Node.js and Express.js REST API boilerplate, meticulously engineered with Clean Architecture and SOLID principles for exceptional scalability and maintainability. It features integrated JWT authentication, Role-Based Access Control (RBAC), and comprehensive CRUD operations for users, posts, and comments. This project is an ideal foundation for enterprise-level applications, showcasing strong separation of concerns, dependency injection, and data persistence with SQLite.
 
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
@@ -8,12 +8,8 @@
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-</div>
-
-## **🎯 Overview**
-This is a REST API built with Node.js that implements user authentication, role-based access control (RBAC), and complete CRUD operations for users, posts, and comments. The project follows clean architecture principles and software best practices.
-
 ## **🌟 Main Features**
+
 - Clean Architecture & SOLID Principles: The application follows "Clean Architecture" principles, promoting separation of concerns and making the codebase maintainable and scalable, as well as SOLID principles, which are a set of best practices for object-oriented software design.
 - JWT (JSON Web Tokens) Authentication
 - Role-Based Access Control (RBAC)
@@ -24,6 +20,7 @@ This is a REST API built with Node.js that implements user authentication, role-
 - Response Time Monitoring
 
 ## **⚙️ Tech Stack**
+
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Database**: SQLite3
@@ -35,8 +32,9 @@ This is a REST API built with Node.js that implements user authentication, role-
 ## **🏗️ Architecture**
 
 ### Project Structure
+
 ```
-CRUD/
+nodejs-enterprise-api-boilerplate/
 ├── src/
 │   ├── controllers/        # Business logic
 │   │   ├── user.controller.js
@@ -68,6 +66,7 @@ CRUD/
 ## **🚀 Getting Started**
 
 ### Prerequisites
+
 - Node.js (v16+)
 - Docker and Docker Compose (optional)
 - Git
@@ -77,12 +76,13 @@ CRUD/
 ### Installation with Docker
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/feelipino/CRUD.git
 cd CRUD
 ```
 
-2. Using Docker Compose
+1. Using Docker Compose
 ```bash
 docker-compose up -d
 ```
@@ -103,7 +103,7 @@ The system implements two types of roles:
   ```
   POST /users/signup
   ```
-  
+
   **Request Body:**
   ```json
   {
@@ -112,7 +112,7 @@ The system implements two types of roles:
     "role": "admin" // or "user" (default is "user" if not specified)
   }
   ```
-  
+
   **Response:**
   ```json
   {
@@ -126,7 +126,7 @@ The system implements two types of roles:
   ```
   POST /users/signin
   ```
-  
+
   **Request Body:**
   ```json
   {
@@ -134,7 +134,7 @@ The system implements two types of roles:
     "password": "your_password"
   }
   ```
-  
+
   **Response:**
   ```json
   {
