@@ -5,7 +5,8 @@ class CommentRepository extends BaseRepository {
         super('comments', db);
     }
 
-    create(user_id, post_id, content) {
+    // Method to create a comment
+    create(post_id, user_id, content) {
         return new Promise((resolve, reject) => {
             const query = `INSERT INTO ${this.tableName} (user_id, post_id, content) VALUES (?, ?, ?)`;
             this.db.run(query, [user_id, post_id, content], function(err) {
@@ -18,6 +19,7 @@ class CommentRepository extends BaseRepository {
         });
     }
 
+    // Method to get all comments
     findAll() {
         return new Promise((resolve, reject) => {
             const query = `
@@ -30,19 +32,6 @@ class CommentRepository extends BaseRepository {
             `;
 
             this.db.all(query, [], (err, rows) => {
-                if (err) {
-                    console.error('Error listing comments:', err);
-                    return reject(err);
-                }
-                resolve(rows);
-            });
-        });
-    }
-
-    update(id, content, user_id) {
-        return new Promise((resolve, reject) => {
-            const query = `UPDATE ${this.tableName} SET content = ? WHERE id = ? AND user_id = ?`;
-            this.db.run(query, [content, id, user_id], function(err) {
                 if (err) {
                     console.error('Error listing comments:', err);
                     return reject(err);

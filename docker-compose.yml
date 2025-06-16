@@ -1,12 +1,11 @@
-version: '3'
 services:
-  blog-api:
+  nodejs-clean-architecture-api:
     build: .
-    container_name: blog-app
+    container_name: nodejs-clean-architecture-api
     ports:
       - "3000:3000"
     volumes:
-      - ./database.db:/usr/src/app/database.db
+      - ./database.db:/usr/src/app/src/database.db
     environment:
       - NODE_ENV=production
       - JWT_SECRET=eb5bd41a577f9420b0c03316dd55e15b0b1a49a44fc8008657e8453f8e8a4e9a7469b0e5334e4ef1f4066c781f224be00ef08673752b8db11744cbc7bd723b3b

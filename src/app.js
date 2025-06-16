@@ -1,5 +1,5 @@
 import express from 'express';
-import sqlite3 from 'sqlite3';
+import db from './database.js';
 import dotenv from 'dotenv';
 import userRoutes from './routes/users.js';
 import postRoutes from './routes/posts.js';
@@ -15,9 +15,6 @@ import CommentController from './controllers/comment.controller.js';
 const app = express();
 dotenv.config();
 app.use(express.json());
-
-// Initializing the database
-const db = new sqlite3.Database('./database.db');
 
 // Creating instances of the repositories and controllers
 const userRepository = new UserRepository(db);

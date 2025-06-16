@@ -3,6 +3,8 @@ npm-debug.log
 database.db
 .git
 .env
+.github
 .gitignore
 .dockerignore
 README.md
+Dockerfile

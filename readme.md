@@ -1,256 +1,363 @@
-# **Node.js Clean Architecture API**
+# Node.js Clean Architecture REST API
 
-A Node.js and Express.js REST API engineered with Clean Architecture and SOLID principles for exceptional scalability and maintainability. It features integrated JWT authentication, Role-Based Access Control (RBAC), and comprehensive CRUD operations for users, posts, and comments.
+A Node.js REST API built with Clean Architecture principles, featuring JWT authentication, Role-Based Access Control (RBAC), and comprehensive CRUD operations.
 
-![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
-![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge) ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-## **🌟 Main Features**
+## 🌟 Features
 
-- Clean Architecture & SOLID Principles: The application follows "Clean Architecture" principles, promoting separation of concerns and making the codebase maintainable and scalable, as well as SOLID principles, which are a set of best practices for object-oriented software design.
-- JWT (JSON Web Tokens) Authentication
-- Role-Based Access Control (RBAC)
-- Repository Pattern Implementation
-- Dependency Injection
-- SQLite Database Integration
-- Cache Middleware for Performance Optimization
-- Response Time Monitoring
+- **Clean Architecture**: Separation of concerns with clear layers (Controllers, Repositories, Middlewares)
+- **SOLID Principles**: Object-oriented design principles for maintainable code
+- **JWT Authentication**: Secure token-based authentication system
+- **Role-Based Access Control**: Admin and User roles with different permissions
+- **Password Encryption**: Bcrypt hashing with salt for secure password storage in database
+- **Repository Pattern**: Abstracted data access layer
+- **Dependency Injection**: Loose coupling between components
+- **Performance Optimization**: Built-in caching and response time monitoring
+- **Docker Support**: Containerized deployment ready
+- **SQLite Database**: Lightweight, embedded database with encrypted password storage
 
-## **⚙️ Tech Stack**
-
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: SQLite3
-- **Authentication**: JWT (JSON Web Tokens)
-- **Password Security**: Bcrypt
-- **Package Managers**: NPM/Bun
-- **Containerization**: Docker
-
-## **🏗️ Architecture**
-
-### Project Structure
-
-```
-nodejs-enterprise-api-boilerplate/
-├── src/
-│   ├── controllers/        # Business logic
-│   │   ├── user.controller.js
-│   │   ├── post.controller.js
-│   │   └── comment.controller.js
-│   ├── middlewares/        # RBAC & authentication middlewares
-│   │   ├── auth.js
-│   │   ├── rbac.js
-│   │   ├── cache.js
-│   │   └── responseTimeLogger.js
-│   ├── repositories/       # Data access layer
-│   │   ├── base.repository.js
-│   │   ├── user.repository.js
-│   │   ├── post.repository.js
-│   │   └── comment.repository.js
-│   ├── routes/             # API endpoints
-│   │   ├── users.js
-│   │   ├── posts.js
-│   │   └── comments.js
-│   ├── app.js              # Application entry point
-│   ├── database.js         # Database configuration
-│   └── roles.js            # RBAC definitions
-├── Dockerfile              # Docker configuration
-├── docker-compose.yml      # Docker Compose configuration
-├── .env                    # Environment variables
-└── package.json            # Project dependencies
-```
-
-## **🚀 Getting Started**
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (v16+)
-- Docker and Docker Compose (optional)
-- Git
+- Node.js (v16 or higher)
+- Docker and Docker Compose (optional but recommended)
 
-**Database Note:** The SQLite database file (`database.db`) will be automatically created in the root directory with the necessary tables when you first run the application. This file is intentionally not tracked by Git (via `.gitignore`) to ensure a clean setup for new clones and to avoid versioning local development data.
+### Installation
 
-### Installation with Docker
+1. **Clone the repository**
 
-1. Clone the repository
+   ```bash
+   git clone https://github.com/feelipino/nodejs-clean-architecture-api
+   cd nodejs-clean-architecture-api
+   ```
 
-```bash
-git clone https://github.com/feelipino/CRUD.git
-cd CRUD
+2. **Using Docker (Recommended)**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Using Node.js directly**
+
+   ```bash
+   npm install
+   npm start
+   ```
+
+The API will be available at `http://localhost:3000`
+
+> **Note**: The SQLite database (`database.db`) will be automatically created with all necessary tables on first run. All passwords are automatically encrypted using bcrypt before being stored in the database.
+
+## 🏗️ Architecture
+
+### Project Structure
+
+```text
+src/
+├── controllers/              # Business logic layer
+│   ├── user.controller.js
+│   ├── post.controller.js
+│   └── comment.controller.js
+├── middlewares/              # Cross-cutting concerns
+│   ├── auth.js               # JWT authentication
+│   ├── rbac.js               # Role-based access control
+│   ├── cache.js              # Response caching
+│   └── responseTimeLogger.js # Performance monitoring
+├── repositories/             # Data access layer
+│   ├── base.repository.js
+│   ├── user.repository.js
+│   ├── post.repository.js
+│   └── comment.repository.js
+├── routes/                   # API route definitions
+│   ├── users.js
+│   ├── posts.js
+│   └── comments.js
+├── app.js                    # Application entry point
+├── database.js               # Database configuration
+└── roles.js                  # RBAC role definitions
 ```
 
-1. Using Docker Compose
-```bash
-docker-compose up -d
+### Key Design Patterns
+
+- **Repository Pattern**: Abstracts data access logic
+- **Dependency Injection**: Controllers receive repositories as dependencies
+- **Middleware Pattern**: Cross-cutting concerns handled by Express middlewares
+- **Clean Architecture**: Clear separation between business logic and infrastructure
+
+## 🔐 Authentication & Authorization
+
+### User Roles
+
+| Role  | Permissions                   |
+|-------|-------------------------------|
+| Admin | Full system access: Create, Read, Update, Delete all resources  |
+| User  | Limited access: Create, Read all resources              |
+
+### Password Security
+
+- **Bcrypt Encryption**: All passwords are hashed using bcrypt with salt rounds before database storage
+- **Secure Comparison**: Password verification uses bcrypt's secure comparison methods
+- **No Plain Text**: Raw passwords are never stored in the database
+
+### Getting Started
+
+1. **Create an Admin Account**
+
+   ```bash
+   curl -X POST http://localhost:3000/users/signup \
+     -H "Content-Type: application/json" \
+     -d '{"username": "admin", "password": "admin123", "role": "admin"}'
+   ```
+
+2. **Login and Get JWT Token**
+
+   ```bash
+   curl -X POST http://localhost:3000/users/signin \
+     -H "Content-Type: application/json" \
+     -d '{"username": "admin", "password": "admin123"}'
+   ```
+
+3. **Use Token in Requests**
+
+   ```bash
+   curl -X GET http://localhost:3000/posts \
+     -H "Authorization: Bearer YOUR_JWT_TOKEN"
+   ```
+
+## 📡 API Reference
+
+### Authentication Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/users/signup` | Register new user | No |
+| POST | `/users/signin` | Login user | No |
+
+**Signup Request:**
+
+```json
+{
+  "username": "john_doe",
+  "password": "secure123",
+  "role": "user"
+}
 ```
 
-The server will be available at `http://localhost:3000`.
+**Signin Response:**
 
-## **🔒 Authentication and Authorization System**
-
-### Roles and Permissions
-The system implements two types of roles:
-
-- **Admin**: Full access (create, read, update, delete)
-- **User**: Limited access (create, read)
-
-### Authentication Flow
-
-1. **Account Creation (Signup)**
-  ```
-  POST /users/signup
-  ```
-
-  **Request Body:**
-  ```json
-  {
-    "username": "your_username",
-    "password": "your_password",
-    "role": "admin" // or "user" (default is "user" if not specified)
-  }
-  ```
-
-  **Response:**
-  ```json
-  {
-    "id": 1,
-    "username": "your_username",
-    "role": "admin"
-  }
-  ```
-
-2. **Login (Signin)**
-  ```
-  POST /users/signin
-  ```
-
-  **Request Body:**
-  ```json
-  {
-    "username": "your_username",
-    "password": "your_password"
-  }
-  ```
-
-  **Response:**
-  ```json
-  {
-    "user": {
-     "id": 1,
-     "username": "your_username",
-     "role": "admin"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-  ```
-
-3. **Using the JWT Token**
-
-  After logging in, you will receive a JWT token that must be included in the `Authorization` header of all requests that require authentication:
-
-  ```
-  Authorization: Bearer your_jwt_token
-  ```
-
-## **📡 API Endpoints**
-
-### Users
-| Method | Endpoint | Description | Authentication | Permission |
-| ------ | -------- | ----------- | -------------- | ---------- |
-| POST | /users/signup | Register new user | No | Public |
-| POST | /users/signin | Authenticate user | No | Public |
-| GET | /users | List all users | Yes | Admin |
-| PUT | /users/:id | Update user | Yes | Admin |
-| DELETE | /users/:id | Delete user | Yes | Admin |
-
-### Posts
-| Method | Endpoint | Description | Authentication | Permission |
-| ------ | -------- | ----------- | -------------- | ---------- |
-| GET | /posts | List all posts | Yes | Admin, User |
-| POST | /posts | Create new post | Yes | Admin, User |
-| PUT | /posts/:id | Update post | Yes | Admin |
-| DELETE | /posts/:id | Delete post | Yes | Admin |
-
-### Comments
-| Method | Endpoint | Description | Authentication | Permission |
-| ------ | -------- | ----------- | -------------- | ---------- |
-| GET | /comments | List all comments | Yes | Admin, User |
-| POST | /comments | Create new comment | Yes | Admin, User |
-| PUT | /comments/:id | Update comment | Yes | Admin |
-| DELETE | /comments/:id | Delete comment | Yes | Admin |
-
-## **🔄 Usage Examples**
-
-### 1. Creating an admin user
-```bash
-curl -X POST http://localhost:3000/users/signup \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "admin123", "role": "admin"}'
-```
-
-### 2. Authenticating and obtaining the JWT token
-```bash
-curl -X POST http://localhost:3000/users/signin \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "admin123"}'
-```
-
-Response:
 ```json
 {
   "user": {
-   "id": 1,
-   "username": "admin",
-   "role": "admin"
+    "id": 1,
+    "username": "john_doe",
+    "role": "user"
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
-### 3. Creating a post (with authentication)
-```bash
-curl -X POST http://localhost:3000/posts \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer your_jwt_token" \
-  -d '{"content": "This is my first post!"}'
+### User Management (Admin Only)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/users` | List all users |
+| PUT | `/users/:id` | Update user |
+| DELETE | `/users/:id` | Delete user |
+
+### Posts
+
+| Method | Endpoint | Description | Admin | User |
+|--------|----------|-------------|-------|------|
+| GET | `/posts` | List all posts | ✅ | ✅ |
+| POST | `/posts` | Create post | ✅ | ✅ |
+| PUT | `/posts/:id` | Update post | ✅ | ❌ |
+| DELETE | `/posts/:id` | Delete post | ✅ | ❌ |
+
+**Create Post:**
+
+```json
+{
+  "content": "This is my first post!"
+}
 ```
 
-### 4. Listing all posts (with authentication)
-```bash
-curl -X GET http://localhost:3000/posts \
-  -H "Authorization: Bearer your_jwt_token"
+### Comments
+
+| Method | Endpoint | Description | Admin | User |
+|--------|----------|-------------|-------|------|
+| GET | `/comments` | List all comments | ✅ | ✅ |
+| POST | `/comments` | Create comment | ✅ | ✅ |
+| PUT | `/comments/:id` | Update comment | ✅ | ❌ |
+| DELETE | `/comments/:id` | Delete comment | ✅ | ❌ |
+
+**Create Comment:**
+
+```json
+{
+  "post_id": 1,
+  "content": "Great post!"
+}
 ```
 
-### 5. Creating a comment on a post (with authentication)
-```bash
-curl -X POST http://localhost:3000/comments \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer your_jwt_token" \
-  -d '{"post_id": 1, "content": "Great post!"}'
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+JWT_SECRET=your-super-secret-jwt-key-here
+JWT_EXPIRATION=100h
 ```
 
-## **🔧 Additional Resources**
+### Docker Configuration
 
-### JWT Token Duration
-The JWT token is valid for 100 hours by default, as configured in the `.env` file.
+The project includes Docker configuration for easy deployment:
 
-### Cache
-The API implements a caching system to improve performance, especially for frequent read operations.
+- **Dockerfile**: Multi-stage build for optimized image size
+- **docker-compose.yml**: Complete stack with volume mounting for database persistence
 
-### Response Time Monitoring
-The `responseTimeLogger` middleware measures and logs the response time of each request, helping to identify potential bottlenecks.
+## 🚀 Performance Features
 
-## **🛠️ Troubleshooting**
+### Caching
 
-### Invalid or expired JWT token
-If you receive an "Invalid or expired token" error, log in again to obtain a new token.
+- **Built-in caching**: Automatic response caching for read operations
+- **Configurable TTL**: Default 60-second cache lifetime
+- **Smart cache keys**: URL-based cache key generation
 
-### Permission denied
-Check if the user has the appropriate role (admin or user) for the operation you are trying to perform.
+### Monitoring
 
+- **Response Time Logging**: Automatic performance monitoring
+- **Request/Response Logging**: Detailed request logging for debugging
 
-## **📄 License**
-This project is licensed under the MIT license.
+## 🧪 Development
+
+### Available Scripts
+
+```bash
+npm start          # Start production server with Bun
+npm run dev        # Start development server with nodemon
+```
+
+### Adding New Features
+
+1. **Create Repository**: Extend `BaseRepository` for data access
+2. **Create Controller**: Handle business logic and HTTP responses
+3. **Define Routes**: Set up endpoints with appropriate middlewares
+4. **Update Permissions**: Modify `roles.js` if needed
+
+### Example: Adding a New Entity
+
+```javascript
+// 1. Create repository
+class CategoryRepository extends BaseRepository {
+    constructor(db) {
+        super('categories', db);
+    }
+    // Add custom methods...
+}
+
+// 2. Create controller
+class CategoryController {
+    constructor(categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+    // Add controller methods...
+}
+
+// 3. Set up routes with middlewares
+router.get('/', verifyToken, checkRolePermission('read'), controller.findAll);
+```
+
+## 🔒 Security
+
+- **Password Hashing**: Bcrypt with salt rounds for secure password encryption in database
+- **JWT Security**: Secure token generation and validation
+- **Role-Based Access**: Granular permission system
+- **Input Validation**: Request validation in controllers
+- **Environment Variables**: Sensitive data in `.env` file
+- **Database Security**: All sensitive data encrypted before storage
+
+## 🗄️ Database Schema
+
+### Users Table
+
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,  -- Encrypted with bcrypt
+    role TEXT DEFAULT 'user'
+);
+```
+
+### Posts Table
+
+```sql
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+```
+
+### Comments Table
+
+```sql
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+```
+
+## 🐳 Deployment
+
+### Docker Deployment
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Check logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+### Production Considerations
+
+- Use a production-grade database (PostgreSQL, MySQL)
+- Set up proper logging and monitoring
+- Configure reverse proxy (Nginx)
+- Set up SSL/TLS certificates
+- Use environment-specific configurations
+- Implement database backup strategies
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with Clean Architecture principles
+- Inspired by Domain-Driven Design
+- Following SOLID principles for maintainable code
+- Secure password handling with bcrypt encryption
+
+---

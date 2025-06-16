@@ -11,8 +11,10 @@ class UserController {
         const { username, password, role = 'user' } = req.body;
 
         // Check if username and password are provided
-        if (!username && !password) {
-            return res.status(400).json({ error: 'Username and password are required.' });
+        if (!username || !password) {
+          return res
+            .status(400)
+            .json({ error: 'Username and password are required.' });
         }
 
         try {
@@ -20,8 +22,8 @@ class UserController {
             const user = await this.userRepository.create(username, password, role);
             //Success response
             res.status(201).json(user);
-        } catch (error) {
 
+        } catch (error) {
             //Treatment of errors
             if (error.message.includes('UNIQUE constraint failed')) {
                 return res.status(400).json({ error: 'Username is already taken.' });
@@ -104,6 +106,3 @@ class UserController {
 }
 
 export default UserController;
-   
-
-
