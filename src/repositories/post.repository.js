@@ -1,7 +1,7 @@
 import { BaseRepository } from './base.repository.js';
 
 class PostRepository extends BaseRepository {
-    
+
     constructor(db) {
         super('posts', db);
     }
@@ -27,7 +27,7 @@ class PostRepository extends BaseRepository {
             SELECT posts.id, posts.content, posts.user_id, users.username
             FROM ${this.tableName}
             JOIN users ON posts.user_id = users.id
-            `
+            `;
             this.db.all(query, [], (err, rows) => {
                 if (err) {
                     console.error('Error listing posts:', err);

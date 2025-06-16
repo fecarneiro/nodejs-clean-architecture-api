@@ -3,5 +3,4 @@ node_modules/
 /blob-report/
 dist/
 coverage/
-database.db
 .github/

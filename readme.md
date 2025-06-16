@@ -92,8 +92,8 @@ src/
 
 | Role  | Permissions                   |
 |-------|-------------------------------|
-| Admin | Full system access: Create, Read, Update, Delete all resources  |
-| User  | Limited access: Create, Read all resources              |
+| Admin | Full system access: Create, Read, Update  |
+| User  | Limited access: Create, Read              |
 
 ### Password Security
 
