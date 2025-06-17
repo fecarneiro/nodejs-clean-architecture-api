@@ -1,6 +1,6 @@
 # Node.js Clean Architecture REST API
 
-A Node.js REST API built with Clean Architecture principles, featuring JWT authentication, Role-Based Access Control (RBAC), and comprehensive CRUD operations.
+A robust Node.js REST API built with Clean Architecture principles, featuring comprehensive JWT authentication, Role-Based Access Control (RBAC), and full CRUD operations. This project demonstrates enterprise-grade software design patterns with secure password encryption, repository pattern implementation, and performance optimization through built-in caching and monitoring.
 
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge) ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
